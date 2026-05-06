@@ -8,7 +8,9 @@ import noteRoutes from './presentation/routes/note.routes.js';
 import authRoutes from './presentation/routes/auth.routes.js';
 import { connectMongo } from './infrastructure/database/mongo/connection.js';
 import { connectMysql } from './infrastructure/database/mysql/connection.js';
- 
+import { setupSwagger } from './infrastructure/config/swagger.config.js';
+
+
 await connectMongo();
 await connectMysql();
  
@@ -16,6 +18,7 @@ const app = express();
  
 app.use(cors());
 app.use(express.json());
+setupSwagger(app);
 app.use(loggerMiddleware);
 app.use(morgan('dev'));
  
@@ -42,3 +45,17 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
+
+
+
+
+
+
+app.use(express.json());
+
+// Ruta de prueba (opcional pero útil para tests)
+app.get('/', (req, res) => {
+    res.status(200).json({ message: 'API funcionando' });
+});
+
+export default app;
