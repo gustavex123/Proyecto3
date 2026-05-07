@@ -8,19 +8,13 @@ export default class NoteService {
     }
 
     async createNote(data) {
-        if (!data.title) {
-            throw new Error("El título es obligatorio");
-        }
-
-        if (!data.content) {
-            throw new Error("El contenido es obligatorio");
-        }
+        if (!data.title || !data.content) { throw new Error("Title and content are required"); }
 
         const note = new NoteEntity(data);
         return await this.noteRepository.save(note);
     }
 
-    async getNotesByUser(userId) {
+    async getNotesByUserId(userId){
         return await this.noteRepository.findByUserId(userId);
     }
 

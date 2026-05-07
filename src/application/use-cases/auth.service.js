@@ -9,13 +9,12 @@ export default class AuthService {
 
     async register(data) {
         const exist= await this.userRepository.findByEmail(data.email);
-        if (exist) {
-            throw new Error("Email already exists");
-        }
+        if(exist){ throw new Error("Email already in use"); }
+
         data.password = await HashService.hash(data.password);
         const newUser = new UserEntity(data);
         await this.userRepository.save(newUser);
-        return "User registered successfully";
+        return { message: "User registered successfully" };
     }
 
     async login({ email, password }) {
